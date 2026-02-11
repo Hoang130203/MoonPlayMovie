@@ -5,7 +5,8 @@ import { buildImageUrl } from '../services/api-client'
 import { DetailPageSkeleton } from '../components/ui/loading-skeleton'
 import { ErrorFallback } from '../components/ui/error-fallback'
 import { MovieGridSection } from '../components/movie/movie-grid-section'
-import { useState, useMemo } from 'react'
+import { showLoader, hideLoader } from '../lib/page-loader-state'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 
 export function MoviePlayerPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -20,6 +21,24 @@ export function MoviePlayerPage() {
     const server = data.episodes[activeServer]
     return server?.server_data.find((ep) => ep.slug === currentEpSlug) || server?.server_data[0]
   }, [data, activeServer, currentEpSlug])
+
+  // Hide loader when episode data resolves
+  useEffect(() => {
+    if (currentEpisode) {
+      const t = setTimeout(() => hideLoader(), 400)
+      return () => clearTimeout(t)
+    }
+  }, [currentEpisode])
+
+  const handleEpisodeChange = useCallback((epSlug: string) => {
+    showLoader()
+    setSearchParams({ tap: epSlug })
+  }, [setSearchParams])
+
+  const handleServerChange = useCallback((idx: number) => {
+    showLoader()
+    setActiveServer(idx)
+  }, [])
 
   if (isLoading) {
     return (
@@ -119,12 +138,11 @@ export function MoviePlayerPage() {
                 {episodes.map((ep, idx) => (
                   <button
                     key={ep.server_name}
-                    onClick={() => setActiveServer(idx)}
-                    className={`px-4 py-1.5 text-sm rounded-lg transition-colors ${
-                      idx === activeServer
+                    onClick={() => handleServerChange(idx)}
+                    className={`px-4 py-1.5 text-sm rounded-lg transition-colors ${idx === activeServer
                         ? 'bg-accent-purple text-white'
                         : 'bg-dark-600 text-gray-300 hover:bg-dark-500'
-                    }`}
+                      }`}
                   >
                     {ep.server_name}
                   </button>
@@ -139,12 +157,11 @@ export function MoviePlayerPage() {
                 return (
                   <button
                     key={ep.slug}
-                    onClick={() => setSearchParams({ tap: ep.slug })}
-                    className={`px-4 py-2 text-sm rounded-lg transition-colors border ${
-                      isActive
+                    onClick={() => handleEpisodeChange(ep.slug)}
+                    className={`px-4 py-2 text-sm rounded-lg transition-colors border ${isActive
                         ? 'bg-accent-purple text-white border-accent-purple'
                         : 'bg-dark-700 text-gray-300 hover:bg-accent-purple/20 hover:text-white border-dark-500 hover:border-accent-purple'
-                    }`}
+                      }`}
                   >
                     {ep.name}
                   </button>

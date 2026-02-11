@@ -5,7 +5,8 @@ import { stripHtml } from '../lib/format-utils'
 import { DetailPageSkeleton } from '../components/ui/loading-skeleton'
 import { ErrorFallback } from '../components/ui/error-fallback'
 import { MovieGridSection } from '../components/movie/movie-grid-section'
-import { useState } from 'react'
+import { showLoader, hideLoader } from '../lib/page-loader-state'
+import { useState, useCallback } from 'react'
 
 export function MovieDetailPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -210,6 +211,12 @@ function EpisodeSection({
   const [activeServer, setActiveServer] = useState(0)
   const server = episodes[activeServer]
 
+  const handleServerChange = useCallback((idx: number) => {
+    showLoader()
+    setActiveServer(idx)
+    setTimeout(() => hideLoader(), 350)
+  }, [])
+
   return (
     <section>
       <h2 className="text-xl font-bold text-white mb-3">Danh sách tập</h2>
@@ -220,12 +227,11 @@ function EpisodeSection({
           {episodes.map((ep, idx) => (
             <button
               key={ep.server_name}
-              onClick={() => setActiveServer(idx)}
-              className={`px-4 py-1.5 text-sm rounded-lg transition-colors ${
-                idx === activeServer
+              onClick={() => handleServerChange(idx)}
+              className={`px-4 py-1.5 text-sm rounded-lg transition-colors ${idx === activeServer
                   ? 'bg-accent-purple text-white'
                   : 'bg-dark-600 text-gray-300 hover:bg-dark-500'
-              }`}
+                }`}
             >
               {ep.server_name}
             </button>

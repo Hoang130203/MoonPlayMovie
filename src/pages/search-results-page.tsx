@@ -4,6 +4,7 @@ import { MovieCard } from '../components/movie/movie-card'
 import { MovieGridSkeleton } from '../components/ui/loading-skeleton'
 import { ErrorFallback, EmptyState } from '../components/ui/error-fallback'
 import { PaginationControls } from '../components/ui/pagination-controls'
+import { showLoader } from '../lib/page-loader-state'
 
 export function SearchResultsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -12,6 +13,7 @@ export function SearchResultsPage() {
   const { data, isLoading, isError, refetch } = useSearchMovies(keyword, page)
 
   function handlePageChange(newPage: number) {
+    showLoader()
     setSearchParams({ q: keyword, page: String(newPage) })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }

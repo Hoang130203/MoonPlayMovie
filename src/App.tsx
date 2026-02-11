@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MainLayout } from './components/layout/main-layout'
 import { Skeleton } from './components/ui/loading-skeleton'
+import { PageTransitionLoader, RouteChangeLoader } from './components/ui/page-transition-loader'
 
 // Lazy-load pages for code-splitting
 const HomePage = lazy(() => import('./pages/home-page').then(m => ({ default: m.HomePage })))
@@ -37,6 +38,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <PageTransitionLoader />
+        <RouteChangeLoader />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route element={<MainLayout />}>

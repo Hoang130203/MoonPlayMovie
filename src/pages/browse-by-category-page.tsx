@@ -4,6 +4,7 @@ import { MovieCard } from '../components/movie/movie-card'
 import { MovieGridSkeleton } from '../components/ui/loading-skeleton'
 import { ErrorFallback, EmptyState } from '../components/ui/error-fallback'
 import { PaginationControls } from '../components/ui/pagination-controls'
+import { showLoader } from '../lib/page-loader-state'
 
 const CATEGORY_LABELS: Record<string, string> = {
   'phim-bo': 'Phim bộ',
@@ -22,6 +23,7 @@ export function BrowseByCategoryPage() {
   const title = CATEGORY_LABELS[slug || ''] || slug || 'Danh mục'
 
   function handlePageChange(newPage: number) {
+    showLoader()
     setSearchParams({ page: String(newPage) })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }

@@ -77,3 +77,121 @@ body {
 .animate-fade-in {
   animation: fade-in 0.5s ease-out forwards;
 }
+
+/* ═══════════ Page Transition Loader ═══════════ */
+
+/* Top progress bar */
+.page-progress-bar-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 9999;
+  background: transparent;
+}
+
+.page-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa, #c084fc, #7c3aed);
+  background-size: 300% 100%;
+  animation: progress-glow 1.5s ease infinite;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0 2px 2px 0;
+  box-shadow:
+    0 0 10px rgba(124, 58, 237, 0.7),
+    0 0 30px rgba(124, 58, 237, 0.4);
+}
+
+@keyframes progress-glow {
+  0% { background-position: 0% 0; }
+  50% { background-position: 150% 0; }
+  100% { background-position: 300% 0; }
+}
+
+/* Overlay */
+.page-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgba(10, 10, 15, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: overlay-in 0.25s ease-out forwards;
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Spinner wrapper */
+.page-loader-spinner-wrapper {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Rotating ring */
+.page-loader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #7c3aed;
+  border-right-color: #a78bfa;
+  animation: ring-spin 1s cubic-bezier(0.6, 0.15, 0.35, 0.85) infinite;
+  filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.5));
+}
+
+.page-loader-ring::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-bottom-color: #c084fc;
+  border-left-color: #7c3aed;
+  animation: ring-spin 1.5s cubic-bezier(0.6, 0.15, 0.35, 0.85) infinite reverse;
+}
+
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Center play icon */
+.page-loader-icon {
+  color: #a78bfa;
+  animation: icon-pulse 1.2s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes icon-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* Loading text */
+.page-loader-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #a78bfa;
+  letter-spacing: 0.05em;
+  animation: text-fade 1.5s ease-in-out infinite;
+  margin: 0;
+}
+
+@keyframes text-fade {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
