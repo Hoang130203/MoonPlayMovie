@@ -1,0 +1,19 @@
+{
+    "rewrites": [
+        {
+            "source": "/ophim-api/:path*",
+            "destination": "https://ophim1.com/:path*"
+        },
+        {
+            "source": "/v1/api/:path*",
+            "destination": "https://ophim1.com/v1/api/:path*"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/[^.]+",
+            "dest": "/",
+            "status": 200
+        }
+    ]
+}
