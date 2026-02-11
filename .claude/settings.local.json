@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(go build:*)",
+      "Bash(dir:*)",
+      "Bash(ls:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout 15 npx vite:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx vite build:*)",
+      "Bash(curl:*)",
+      "Bash(timeout 10 npx vite:*)"
+    ]
+  }
+}
