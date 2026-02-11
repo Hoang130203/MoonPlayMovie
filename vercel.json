@@ -7,13 +7,10 @@
         {
             "source": "/v1/api/:path*",
             "destination": "https://ophim1.com/v1/api/:path*"
-        }
-    ],
-    "routes": [
+        },
         {
-            "src": "/[^.]+",
-            "dest": "/",
-            "status": 200
+            "source": "/((?!assets/).*)",
+            "destination": "/index.html"
         }
     ]
 }
