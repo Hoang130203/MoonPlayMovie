@@ -7,6 +7,7 @@ import { ErrorFallback } from '../components/ui/error-fallback'
 import { MovieGridSection } from '../components/movie/movie-grid-section'
 import { showLoader, hideLoader } from '../lib/page-loader-state'
 import { useState, useCallback } from 'react'
+import { OptimizedImage } from '../components/ui/optimized-image'
 
 export function MovieDetailPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -78,9 +79,10 @@ export function MovieDetailPage() {
 function MovieBackdrop({ posterUrl }: { posterUrl: string }) {
   return (
     <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden">
-      <img
+      <OptimizedImage
         src={buildImageUrl(posterUrl)}
         alt=""
+        priority
         className="w-full h-full object-cover blur-sm animate-ken-burns"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-dark-900/50 via-dark-900/70 to-dark-900" />
@@ -91,15 +93,13 @@ function MovieBackdrop({ posterUrl }: { posterUrl: string }) {
 }
 
 function MoviePoster({ movie }: { movie: { thumb_url: string; name: string } }) {
-  const [imgError, setImgError] = useState(false)
-
   return (
     <div className="w-48 md:w-72 shrink-0 mx-auto md:mx-0 animate-scale-in">
       <div className="relative group">
-        <img
-          src={imgError ? '/placeholder-movie.svg' : buildImageUrl(movie.thumb_url)}
+        <OptimizedImage
+          src={buildImageUrl(movie.thumb_url)}
           alt={movie.name}
-          onError={() => setImgError(true)}
+          priority
           className="w-full rounded-xl shadow-2xl shadow-black/50 transition-transform duration-500 group-hover:scale-[1.02]"
         />
         {/* Glow effect behind poster */}

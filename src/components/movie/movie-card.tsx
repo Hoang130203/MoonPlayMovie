@@ -1,17 +1,14 @@
 import { Link } from 'react-router-dom'
 import { buildImageUrl } from '../../services/api-client'
 import type { MovieItem } from '../../types/movie-types'
-import { useState } from 'react'
+import { OptimizedImage } from '../ui/optimized-image'
 
 interface MovieCardProps {
   movie: MovieItem
 }
 
 export function MovieCard({ movie }: MovieCardProps) {
-  const [imgError, setImgError] = useState(false)
-  const imageUrl = imgError
-    ? '/placeholder-movie.svg'
-    : buildImageUrl(movie.thumb_url)
+  const imageUrl = buildImageUrl(movie.thumb_url)
 
   return (
     <Link
@@ -20,11 +17,9 @@ export function MovieCard({ movie }: MovieCardProps) {
     >
       {/* Poster with glow border */}
       <div className="movie-card-glow relative aspect-[2/3] bg-dark-700 rounded-xl overflow-hidden">
-        <img
+        <OptimizedImage
           src={imageUrl}
           alt={movie.name}
-          loading="lazy"
-          onError={() => setImgError(true)}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         />
 

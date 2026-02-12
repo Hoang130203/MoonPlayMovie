@@ -4,6 +4,7 @@ import { Autoplay, Pagination, EffectFade } from 'swiper/modules'
 import 'swiper/swiper-bundle.css'
 import { buildImageUrl } from '../../services/api-client'
 import type { MovieItem } from '../../types/movie-types'
+import { OptimizedImage } from '../ui/optimized-image'
 
 interface HeroBannerProps {
   movies: MovieItem[]
@@ -40,9 +41,10 @@ function HeroSlide({ movie }: { movie: MovieItem }) {
   return (
     <div className="relative w-full h-full overflow-hidden">
       {/* Background image with Ken Burns */}
-      <img
+      <OptimizedImage
         src={bgImage}
         alt={movie.name}
+        priority
         className="w-full h-full object-cover animate-ken-burns"
       />
 
