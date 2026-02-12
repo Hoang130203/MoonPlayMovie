@@ -117,6 +117,7 @@ function MovieInfo({
   episodes: import('../types/movie-types').EpisodeServer[]
 }) {
   const firstEpisode = episodes[0]?.server_data?.[0]
+  const [showTrailer, setShowTrailer] = useState(false)
 
   return (
     <div className="flex-1 space-y-4 animate-fade-in-up">
@@ -186,16 +187,27 @@ function MovieInfo({
           </Link>
         )}
         {movie.trailer_url && (
-          <a
-            href={movie.trailer_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-7 py-3 glass hover:bg-white/15 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+          <button
+            onClick={() => setShowTrailer(!showTrailer)}
+            className={`inline-flex items-center gap-2 px-7 py-3 rounded-xl font-medium transition-all duration-300 ${
+              showTrailer
+                ? 'bg-accent-purple text-white shadow-lg shadow-purple-500/30'
+                : 'glass hover:bg-white/15 text-white hover:shadow-lg hover:shadow-purple-500/10'
+            }`}
           >
-            Trailer
-          </a>
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.43z" />
+              <path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="#0a0a0f" />
+            </svg>
+            {showTrailer ? 'Ẩn trailer' : 'Trailer'}
+          </button>
         )}
       </div>
+
+      {/* Embedded trailer */}
+      {showTrailer && movie.trailer_url && (
+        <TrailerEmbed url={movie.trailer_url} />
+      )}
     </div>
   )
 }
@@ -263,5 +275,44 @@ function EpisodeSection({
         ))}
       </div>
     </section>
+  )
+}
+
+/** Extract YouTube embed URL from various YouTube link formats */
+function getYouTubeEmbedUrl(url: string): string | null {
+  const patterns = [
+    /youtube\.com\/watch\?v=([^&]+)/,
+    /youtube\.com\/embed\/([^?]+)/,
+    /youtu\.be\/([^?]+)/,
+  ]
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match) return `https://www.youtube.com/embed/${match[1]}`
+  }
+  return null
+}
+
+function TrailerEmbed({ url }: { url: string }) {
+  const embedUrl = getYouTubeEmbedUrl(url)
+
+  if (!embedUrl) {
+    // Fallback: open non-YouTube URLs in iframe directly
+    return (
+      <div className="relative w-full aspect-video rounded-xl overflow-hidden glass animate-scale-in mt-2">
+        <iframe src={url} className="w-full h-full" allowFullScreen title="Trailer" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative w-full aspect-video rounded-xl overflow-hidden animate-scale-in mt-2 glow-mixed">
+      <iframe
+        src={`${embedUrl}?autoplay=1&rel=0`}
+        className="w-full h-full"
+        allowFullScreen
+        allow="autoplay; encrypted-media"
+        title="Trailer"
+      />
+    </div>
   )
 }
