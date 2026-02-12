@@ -24,7 +24,7 @@ export function SiteHeader() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close mobile menu on route change (React-recommended pattern)
+  // Close mobile menu on route change
   const [prevPath, setPrevPath] = useState(location.pathname)
   if (prevPath !== location.pathname) {
     setPrevPath(location.pathname)
@@ -48,40 +48,47 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-dark-900/95 backdrop-blur-md shadow-lg' : 'bg-gradient-to-b from-dark-900/80 to-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? 'bg-dark-900/90 backdrop-blur-xl shadow-lg shadow-black/20 border-b border-white/5'
+          : 'bg-gradient-to-b from-dark-900/80 to-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <span className="text-2xl">🌙</span>
+        <Link to="/" className="flex items-center gap-2 shrink-0 group">
+          <span className="text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+            🌙
+          </span>
           <span className="text-xl font-bold text-white tracking-tight">
-            Moon<span className="text-accent-purple">Play</span>
+            Moon<span className="gradient-text-purple">Play</span>
           </span>
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                location.pathname === link.path
-                  ? 'text-accent-purple bg-accent-purple/10'
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = location.pathname === link.path
+            return (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  isActive
+                    ? 'text-white nav-link-active'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Search + mobile toggle */}
         <div className="flex items-center gap-2">
           {/* Search bar (desktop) */}
-          <div className={`hidden md:block transition-all duration-300 ${showSearch ? 'w-64' : 'w-0'} overflow-hidden`}>
+          <div className={`hidden md:block transition-all duration-400 ease-out ${showSearch ? 'w-64 opacity-100' : 'w-0 opacity-0'} overflow-hidden`}>
             <form onSubmit={handleSearch}>
               <input
                 ref={searchInputRef}
@@ -89,14 +96,14 @@ export function SiteHeader() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Tìm phim..."
-                className="w-full px-4 py-1.5 bg-dark-700 border border-dark-500 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent-purple"
+                className="w-full px-4 py-1.5 bg-dark-700/80 border border-dark-500 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none search-glow transition-all duration-300"
               />
             </form>
           </div>
 
           <button
             onClick={toggleSearch}
-            className="hidden md:flex w-9 h-9 items-center justify-center rounded-lg hover:bg-white/10 transition-colors text-gray-300"
+            className="hidden md:flex w-9 h-9 items-center justify-center rounded-xl hover:bg-white/10 transition-all duration-300 text-gray-400 hover:text-white hover:shadow-lg hover:shadow-purple-500/10"
             aria-label="Tìm kiếm"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,10 +114,10 @@ export function SiteHeader() {
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/10 text-gray-300"
+            className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition-all duration-300"
             aria-label="Menu"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 transition-transform duration-300" style={{ transform: mobileMenuOpen ? 'rotate(90deg)' : 'rotate(0)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {mobileMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -121,9 +128,9 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu with slide animation */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-dark-800/95 backdrop-blur-md border-t border-dark-600">
+        <div className="md:hidden glass border-t border-white/5 animate-slide-down">
           <div className="px-4 py-3">
             <form onSubmit={handleSearch} className="mb-3">
               <input
@@ -131,22 +138,24 @@ export function SiteHeader() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Tìm phim..."
-                className="w-full px-4 py-2.5 bg-dark-700 border border-dark-500 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent-purple"
+                className="w-full px-4 py-2.5 bg-dark-700/80 border border-dark-500 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none search-glow transition-all duration-300"
               />
             </form>
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  location.pathname === link.path
-                    ? 'text-accent-purple bg-accent-purple/10'
-                    : 'text-gray-300 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            <div className="stagger-children">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`block px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+                    location.pathname === link.path
+                      ? 'text-white bg-accent-purple/15 border border-accent-purple/20'
+                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       )}

@@ -23,15 +23,20 @@ const FOOTER_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-dark-800 border-t border-dark-600 mt-12">
+    <footer className="bg-dark-800 mt-12 relative">
+      {/* Gradient top border */}
+      <div className="gradient-divider" />
+
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <Link to="/" className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🌙</span>
+            <Link to="/" className="flex items-center gap-2 mb-3 group">
+              <span className="text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                🌙
+              </span>
               <span className="text-xl font-bold text-white">
-                Moon<span className="text-accent-purple">Play</span>
+                Moon<span className="gradient-text-purple">Play</span>
               </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
@@ -42,13 +47,13 @@ export function SiteFooter() {
           {/* Links */}
           {FOOTER_LINKS.map((group) => (
             <div key={group.title}>
-              <h4 className="text-white font-semibold mb-3">{group.title}</h4>
-              <ul className="space-y-2">
+              <h4 className="text-white font-semibold mb-3 section-title-line">{group.title}</h4>
+              <ul className="space-y-2 mt-4">
                 {group.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       to={link.path}
-                      className="text-gray-400 hover:text-accent-purple-light text-sm transition-colors"
+                      className="text-gray-400 hover:text-accent-purple-light text-sm transition-colors duration-300 hover-underline inline-block"
                     >
                       {link.label}
                     </Link>
@@ -60,16 +65,17 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-dark-600 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="gradient-divider mt-8" />
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm">
             © 2026 MoonPlay. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {['facebook', 'youtube', 'instagram', 'tiktok'].map((social) => (
               <a
                 key={social}
                 href="#"
-                className="w-9 h-9 rounded-full bg-dark-600 hover:bg-accent-purple/20 flex items-center justify-center transition-colors text-gray-400 hover:text-accent-purple-light"
+                className="social-icon-glow w-9 h-9 rounded-xl glass flex items-center justify-center text-gray-400 hover:text-accent-purple-light"
                 aria-label={social}
               >
                 <SocialIcon name={social} />

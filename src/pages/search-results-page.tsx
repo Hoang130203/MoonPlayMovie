@@ -20,12 +20,12 @@ export function SearchResultsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-      <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+      <h1 className="text-2xl md:text-3xl font-bold text-white mb-2 section-title-line">
         Kết quả tìm kiếm
       </h1>
       {keyword && (
-        <p className="text-gray-400 mb-6">
-          Từ khóa: <span className="text-accent-purple-light">"{keyword}"</span>
+        <p className="text-gray-400 mb-6 mt-4">
+          Từ khóa: <span className="gradient-text-purple font-medium">"{keyword}"</span>
         </p>
       )}
 
@@ -48,7 +48,7 @@ export function SearchResultsPage() {
             <EmptyState message={`Không tìm thấy phim nào cho "${keyword}".`} />
           ) : (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 stagger-children">
                 {data.data.items.map((movie) => (
                   <MovieCard key={movie._id || movie.slug} movie={movie} />
                 ))}

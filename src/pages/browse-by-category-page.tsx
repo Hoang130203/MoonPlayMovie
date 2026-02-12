@@ -30,7 +30,7 @@ export function BrowseByCategoryPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-      <h1 className="text-2xl md:text-3xl font-bold text-white mb-6">{title}</h1>
+      <h1 className="text-2xl md:text-3xl font-bold text-white mb-6 section-title-line">{title}</h1>
 
       {isLoading && <MovieGridSkeleton count={20} />}
 
@@ -47,7 +47,7 @@ export function BrowseByCategoryPage() {
             <EmptyState message="Không có phim nào trong danh mục này." />
           ) : (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 stagger-children">
                 {data.data.items.map((movie) => (
                   <MovieCard key={movie._id || movie.slug} movie={movie} />
                 ))}
