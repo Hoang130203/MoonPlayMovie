@@ -54,8 +54,7 @@ export function BrowseByCategoryPage() {
               </div>
 
               <PaginationControls
-                currentPage={data.data.params.pagination.currentPage}
-                totalPages={data.data.params.pagination.totalPages}
+                pagination={data.data.params.pagination}
                 onPageChange={handlePageChange}
               />
             </>

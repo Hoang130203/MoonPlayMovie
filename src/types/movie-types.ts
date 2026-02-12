@@ -33,7 +33,8 @@ export interface Pagination {
   totalItems: number
   totalItemsPerPage: number
   currentPage: number
-  totalPages: number
+  totalPages?: number
+  pageRanges?: number
 }
 
 export interface MovieListResponse {

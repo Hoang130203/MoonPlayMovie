@@ -16,22 +16,33 @@ export function stripHtml(html: string): string {
 }
 
 /**
- * Build page numbers array for pagination (with ellipsis gaps)
+ * Build page numbers array for pagination.
+ * Shows first, last, and 5 pages nearest to current with ellipsis gaps.
+ * Example: [1, '...', 4, 5, (6), 7, 8, '...', 20]
  */
 export function buildPageNumbers(current: number, total: number): (number | '...')[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
 
-  const pages: (number | '...')[] = [1]
+  const pages: (number | '...')[] = []
 
-  if (current > 3) pages.push('...')
+  // 5 pages centered around current
+  const start = Math.max(1, Math.min(current - 2, total - 4))
+  const end = Math.min(total, Math.max(current + 2, 5))
 
-  const start = Math.max(2, current - 1)
-  const end = Math.min(total - 1, current + 1)
+  // First page + ellipsis if window doesn't start at 1
+  if (start > 1) {
+    pages.push(1)
+    if (start > 2) pages.push('...')
+  }
 
+  // Window of 5 pages
   for (let i = start; i <= end; i++) pages.push(i)
 
-  if (current < total - 2) pages.push('...')
+  // Ellipsis + last page if window doesn't reach end
+  if (end < total) {
+    if (end < total - 1) pages.push('...')
+    pages.push(total)
+  }
 
-  pages.push(total)
   return pages
 }
