@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { SiteHeader } from './site-header'
 import { SiteFooter } from './site-footer'
+import { ScrollToTopButton } from '../ui/scroll-to-top-button'
 
 export function MainLayout() {
   return (
@@ -10,6 +11,7 @@ export function MainLayout() {
         <Outlet />
       </main>
       <SiteFooter />
+      <ScrollToTopButton />
     </div>
   )
 }

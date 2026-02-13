@@ -6,6 +6,7 @@ import { DetailPageSkeleton } from '../components/ui/loading-skeleton'
 import { ErrorFallback } from '../components/ui/error-fallback'
 import { MovieGridSection } from '../components/movie/movie-grid-section'
 import { showLoader, hideLoader } from '../lib/page-loader-state'
+import { addToHistory } from '../lib/watch-history-storage'
 import { useState, useMemo, useEffect, useCallback } from 'react'
 
 export function MoviePlayerPage() {
@@ -30,6 +31,21 @@ export function MoviePlayerPage() {
       return () => clearTimeout(t)
     }
   }, [currentEpisode])
+
+  // Save to watch history when episode starts playing
+  useEffect(() => {
+    if (currentEpisode && data?.movie) {
+      addToHistory({
+        slug: data.movie.slug,
+        name: data.movie.name,
+        origin_name: data.movie.origin_name,
+        thumb_url: data.movie.thumb_url,
+        episode_slug: currentEpisode.slug,
+        episode_name: currentEpisode.name,
+        timestamp: Date.now(),
+      })
+    }
+  }, [currentEpisode, data?.movie])
 
   const handleEpisodeChange = useCallback((epSlug: string) => {
     showLoader()
